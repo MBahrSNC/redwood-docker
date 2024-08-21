@@ -15,7 +15,7 @@ services:
     entrypoint: |
       bash -c "
       apt-get update && apt-get install -y openssl libssl3 ca-certificates &&
-      echo 'y\n\n' | corepack enable &&
+      corepack disable yarn &&
       if [ ! -f /app/redwood.toml ]; then
         echo '{\"private\": true}' > /app/package.json &&
         echo 'n\n' | yarn create redwood-app . --force --no-typescript --overwrite;
