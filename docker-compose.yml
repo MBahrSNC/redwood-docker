@@ -24,7 +24,7 @@ services:
       yarn install --yes &&
       corepack enable &&
       if [ \"$NODE_ENV\" = \"production\" ]; then
-        yarn install &&
+        yarn install --yes &&
         if [ ! -f /app/prisma/schema.prisma ]; then
           echo 'Prisma schema not found. Skipping prisma generate.';
         #if [ ! -f /app/api/db/schema.prisma ]; then
@@ -39,7 +39,7 @@ services:
           echo '{\"private\": true}' > /app/package.json &&
           echo 'n\n' | yarn create redwood-app . --force --no-typescript --overwrite;
         fi &&
-        yarn install &&
+        yarn install --yes &&
         rm -rf node_modules/.prisma &&
         npx prisma generate &&
         yarn rw dev;
