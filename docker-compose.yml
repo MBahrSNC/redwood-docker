@@ -14,14 +14,23 @@ services:
       BROWSER: "none"
     entrypoint: |
       bash -c "
+      # Install dependencies
       apt-get update && apt-get install -y openssl libssl3 ca-certificates yarn &&
+      
+      # Initialize Redwood if not already present
       if [ ! -f /app/redwood.toml ]; then
         echo '{\"private\": true}' > /app/package.json &&
-        echo 'n\n' | yarn create redwood-app . --force --no-typescript --overwrite;
-      fi &&
+        yarn create redwood-app . --force --no-typescript --overwrite;
+      fi
+
+      # Install dependencies and generate Prisma
       yarn install --yes &&
       rm -rf node_modules/.prisma &&
       npx prisma generate &&
+
+      # Enable Corepack for Yarn 3
       corepack enable &&
+
+      # Start Redwood development server
       yarn rw dev
       "
