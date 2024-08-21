@@ -19,24 +19,7 @@ services:
       
       # Initialize Redwood if not already present
       if [ ! -f /app/redwood.toml ]; then
-        # Create a basic package.json with 'private' set to true
-        echo '{
-          "name": "redwood-app",
-          "version": "1.0.0",
-          "private": true,
-          "scripts": {
-            "dev": "rw dev",
-            "build": "rw build",
-            "start": "rw start",
-            "generate": "rw generate"
-          },
-          "dependencies": {
-            "@redwoodjs/api": "^0.20.0",
-            "@redwoodjs/web": "^0.20.0",
-            "prisma": "^4.10.0"
-          }
-        }' > /app/package.json &&
-        yarn create redwood-app . --force --no-typescript --overwrite;
+        echo 'n\n' | yarn create redwood-app . --force --no-typescript --overwrite;
       fi
 
       # Install dependencies and generate Prisma
@@ -45,7 +28,7 @@ services:
       npx prisma generate &&
 
       # Enable Corepack for Yarn 3
-      corepack enable &&
+      corepack enable --force --yes -y &&
 
       # Start Redwood development server
       yarn rw dev
