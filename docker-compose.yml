@@ -19,8 +19,24 @@ services:
       
       # Initialize Redwood if not already present
       if [ ! -f /app/redwood.toml ]; then
-        echo '{\"private\": true}' > /app/package.json &&
-        yarn create redwood-app . --force --no-typescript --overwrite;
+        # Create a basic package.json with 'private' set to true
+        echo '{
+          "name": "redwood-app",
+          "version": "1.0.0",
+          "private": true,
+          "scripts": {
+            "dev": "rw dev",
+            "build": "rw build",
+            "start": "rw start",
+            "generate": "rw generate"
+          },
+          "dependencies": {
+            "@redwoodjs/api": "^0.20.0",
+            "@redwoodjs/web": "^0.20.0",
+            "prisma": "^4.10.0"
+          }
+        }' > /app/package.json &&
+        echo 'n\n' | yarn create redwood-app . --force --no-typescript --overwrite;
       fi
 
       # Install dependencies and generate Prisma
