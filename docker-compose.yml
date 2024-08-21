@@ -18,15 +18,15 @@ services:
     environment:
       BROWSER: "none"
       NODE_ENV: ${NODE_ENV:-development} # Default to development if not set
+      YARN_VERSION: 4.4.1
     entrypoint: |
       bash -c "
       apt-get update && apt-get install -y openssl libssl3 ca-certificates yarn &&
       yarn config set Telemetry 0
-      yarn install --yes &&
+      yarn install &&
       corepack enable &&
       corepack prepare yarn@stable --activate &&
       if [ \"$NODE_ENV\" = \"production\" ]; then
-        yarn install --yes &&
         if [ ! -f /app/prisma/schema.prisma ]; then
           echo 'Prisma schema not found. Skipping prisma generate.';
         #if [ ! -f /app/api/db/schema.prisma ]; then
