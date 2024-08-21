@@ -18,7 +18,7 @@ services:
       apt-get update && apt-get install -y openssl libssl3 ca-certificates yarn &&
       
       # Enable Corepack for Yarn 3
-      corepack enable --yes -y &&
+      corepack enable -y &&
       
       # Initialize Redwood if not already present
       if [ ! -f /app/redwood.toml ]; then
