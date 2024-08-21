@@ -7,7 +7,7 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-      - ./api/db/schema.prisma:/app/prisma/schema.prisma # Mount the Prisma schema file to the container
+      - redwood-prisma:/app/prisma # Mount the entire prisma directory instead of just the schema.prisma file
     ports:
       - "8910:8910" # Redwood Web
       - "8911:8911" # Redwood API
@@ -45,3 +45,9 @@ services:
 
 volumes:
   redwood-data:
+  redwood-prisma:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./api/db
