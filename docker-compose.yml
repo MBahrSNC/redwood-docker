@@ -21,7 +21,7 @@ services:
     entrypoint: |
       bash -c "
       apt-get update && apt-get install -y openssl libssl3 ca-certificates yarn &&
-      yarn config set --home Telemetry 0
+      yarn config set Telemetry 0
       yarn install --yes &&
       corepack enable &&
       corepack prepare yarn@stable --activate &&
@@ -39,7 +39,7 @@ services:
       else
         if [ ! -f /app/redwood.toml ]; then
           echo '{\"private\": true}' > /app/package.json &&
-          echo 'n\n' | yarn create redwood-app . --force --no-typescript --overwrite;
+          echo 'n\n' | yarn create redwood-app . --force --no-typescript --overwrite --no;
         fi &&
         yarn install --yes &&
         rm -rf node_modules/.prisma &&
