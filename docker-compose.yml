@@ -7,9 +7,13 @@ services:
     working_dir: /app
     volumes:
       - .:/app
+      - ./api/db/schema.prisma:/app/prisma/schema.prisma # Mount the Prisma schema file to the container
     ports:
       - "8910:8910" # Redwood Web
       - "8911:8911" # Redwood API
+      - "5555:5555" # Prisma Studio
+      - "7910:7910" # Storybook
+      - "4318:4318" # Redwood Studio
     environment:
       BROWSER: "none"
       NODE_ENV: ${NODE_ENV:-development} # Default to development if not set
