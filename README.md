@@ -1,5 +1,7 @@
 # redwood-docker
 
+My attempt at dockerizing RedwoodJS
+
 ## Working
 
 - docker-compose-checkpoint-v1.yml
