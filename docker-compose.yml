@@ -20,7 +20,8 @@ services:
    entrypoint: |
      sh -c "
      apk add --no-cache openssl ca-certificates &&
-     echo 'yes\n' | corepack enable &&
+     yarn install corepack && 
+     echo 'Y\n\n' | corepack enable &&
      yarn config set --home enableTelemetry 0 &&
      if [ \"$NODE_ENV\" = \"production\" ]; then
        yarn install &&
