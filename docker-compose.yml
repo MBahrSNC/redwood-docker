@@ -28,7 +28,7 @@ services:
       # Install dependencies and generate Prisma
       yarn install --yes &&
       rm -rf node_modules/.prisma &&
-      npx prisma generate &&
+      npx prisma generate --y --yes &&
 
       # Start Redwood development server
       yarn rw dev
