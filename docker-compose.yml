@@ -17,6 +17,9 @@ services:
       # Install dependencies
       apt-get update && apt-get install -y openssl libssl3 ca-certificates yarn &&
       
+      # Enable Corepack for Yarn 3
+      corepack enable --force --yes -y &&
+      
       # Initialize Redwood if not already present
       if [ ! -f /app/redwood.toml ]; then
         echo 'n\n' | yarn create redwood-app . --force --no-typescript --overwrite;
@@ -26,9 +29,6 @@ services:
       yarn install --yes &&
       rm -rf node_modules/.prisma &&
       npx prisma generate &&
-
-      # Enable Corepack for Yarn 3
-      corepack enable --force --yes -y &&
 
       # Start Redwood development server
       yarn rw dev
