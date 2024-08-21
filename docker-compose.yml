@@ -1,7 +1,7 @@
 version: "3.8"
 services:
  redwood-app:
-   image: node:20-alpine
+   image: node:20-bookworm-slim
    container_name: redwood-app
    working_dir: /app
    volumes:
@@ -19,7 +19,8 @@ services:
      NODE_ENV: ${NODE_ENV:-development} # Default to development if not set
    entrypoint: |
      sh -c "
-     apk add --no-cache openssl ca-certificates &&
+     apt-get
+     apt-get install -y openssl ca-certificates &&
      corepack enable &&
      if [ \"$NODE_ENV\" = \"production\" ]; then
        yarn install &&
