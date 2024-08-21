@@ -1,43 +1,50 @@
 version: "3.8"
+
 services:
- redwood-app:
-   image: node:20-alpine
-   container_name: redwood-app
-   working_dir: /app
-   volumes:
-     - .:/app
-     - /app/node_modules # Prevents node_modules from being overwritten
-     - ./api/db:/app/api/db # Mount the entire prisma directory
-   ports:
-     - "8910:8910" # Redwood Web
-     - "8911:8911" # Redwood API
-     - "5555:5555" # Prisma Studio
-     - "7910:7910" # Storybook
-     - "4318:4318" # Redwood Studio
-   environment:
-     BROWSER: "none"
-     NODE_ENV: ${NODE_ENV:-development} # Default to development if not set
-   entrypoint: |
-     sh -c "
-     apk add --no-cache openssl ca-certificates &&
-     echo 'yes\n' | corepack enable &&
-     yarn config set --home enableTelemetry 0 &&
-     if [ \"$NODE_ENV\" = \"production\" ]; then
-       yarn install &&
-       if [ ! -f /app/api/db/schema.prisma ]; then
-         echo 'Prisma schema not found. Skipping prisma generate.';
-       else
-         npx prisma generate --schema=/app/api/db/schema.prisma;
-       fi &&
-       yarn rw build &&
-       yarn rw serve;
-     else
-       yarn install &&
-       rm -rf node_modules/.prisma &&
-       npx prisma generate &&
-       yarn rw dev;
-     fi
-     "
-   restart: unless-stopped
+  redwood-app:
+    image: node:20-bookworm-slim
+    container_name: redwood-app
+    working_dir: /app
+    volumes:
+      - .:/app
+      # mount the ./api/db/schema.prisma file to the container
+      - ./api/db/schema.prisma:/app/prisma/schema.prisma
+    ports:
+      - "8910:8910" # Redwood Web
+      - "8911:8911" # Redwood API
+      - "5555:5555" # Redwood Prisma Studio
+      - "4318:4318" # Redwood Studio
+      - "7910:7910" # Redwood Storybook
+    environment:
+      BROWSER: "none"
+      NODE_ENV: ${NODE_ENV:-development} # Default to development if not set
+    entrypoint: |
+      bash -c "
+      apt-get update && apt-get install -y openssl libssl3 ca-certificates &&
+      corepack enable &&
+      if [ \"$NODE_ENV\" = \"production\" ]; then
+        yarn install &&
+        if [ ! -f /app/prisma/schema.prisma ]; then
+          echo 'Prisma schema not found. Skipping prisma generate.';
+        #if [ ! -f /app/api/db/schema.prisma ]; then
+        #  echo 'Prisma schema not found. Skipping prisma generate.';
+        else
+          npx prisma generate --schema=/app/prisma/schema.prisma;
+        fi &&
+        yarn rw build &&
+        yarn rw serve;
+      else
+        if [ ! -f /app/redwood.toml ]; then
+          echo '{\"private\": true}' > /app/package.json &&
+          echo 'n\n' | yarn create redwood-app . --force --no-typescript --overwrite;
+        fi &&
+        yarn install &&
+        rm -rf node_modules/.prisma &&
+        npx prisma generate &&
+        yarn rw dev;
+      fi
+      "
+    restart: unless-stopped
+
 volumes:
- redwood-data:
+  redwood-data:
