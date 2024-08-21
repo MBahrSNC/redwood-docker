@@ -2,11 +2,16 @@
 
 My attempt at dockerizing RedwoodJS
 
-## Working
+## Setup
 
-- docker-compose-checkpoint-v1.yml
-- docker-compose.dev.yml
+```shell
+git clone https://github.com/MBahrSNC/redwood-docker
+```
 
-## Not working
+```shell
+docker compose up -d  # development
+```
 
-- docker-compose.prod.yml
+```shell
+NODE_ENV=production docker compose up -d  # production
+```
