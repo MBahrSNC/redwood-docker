@@ -34,8 +34,8 @@ jobs:
 
     - name: Push Docker Images
       run: |
-        docker tag redwood-app ghcr.io/${{ github.repository }}/redwood:latest
-        docker push ghcr.io/${{ github.repository }}/redwood:latest
+        docker tag redwood-app ghcr.io/mbahrsnc/redwood-docker/redwood:latest
+        docker push ghcr.io/mbahrsnc/redwood-docker/redwood:latest
 
     - name: Deploy with Docker Compose
       run: docker-compose up -d
