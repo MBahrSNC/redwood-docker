@@ -7,7 +7,6 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-      - redwood-prisma:/app/prisma
     ports:
       - "8910:8910" # Redwood Web
       - "8911:8911" # Redwood API
@@ -45,9 +44,5 @@ services:
 
 volumes:
   redwood-data:
-  redwood-prisma:
-    driver: local
-    driver_opts:
-      type: none
       o: bind
       device: ./api/db
