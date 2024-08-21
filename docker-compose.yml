@@ -36,7 +36,7 @@ services:
             "prisma": "^4.10.0"
           }
         }' > /app/package.json &&
-        echo 'n\n' | yarn create redwood-app . --force --no-typescript --overwrite;
+        yarn create redwood-app . --force --no-typescript --overwrite;
       fi
 
       # Install dependencies and generate Prisma
