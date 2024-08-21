@@ -20,7 +20,8 @@ services:
       NODE_ENV: ${NODE_ENV:-development} # Default to development if not set
     entrypoint: |
       bash -c "
-      apt-get update && apt-get install -y openssl libssl3 ca-certificates &&
+      apt-get update && apt-get install -y openssl libssl3 ca-certificates yarn &&
+      yarn install --yes &&
       corepack enable &&
       if [ \"$NODE_ENV\" = \"production\" ]; then
         yarn install &&
