@@ -5,11 +5,7 @@ My attempt at dockerizing RedwoodJS
 ## Setup
 
 ```shell
-mkdir app
-```
-
-```shell
-cd app
+mkdir app && cd app
 ```
 
 ```shell
