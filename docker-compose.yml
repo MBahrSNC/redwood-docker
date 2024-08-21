@@ -3,7 +3,7 @@ version: "3.8"
 services:
   redwood-app:
     image: node:20-bookworm-slim
-    container_name: my-app
+    container_name: redwood-app
     working_dir: /app
     volumes:
       - .:/app
