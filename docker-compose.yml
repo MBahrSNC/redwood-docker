@@ -1,53 +1,46 @@
-version: "3.8"
+
+version: '3.8'
 
 services:
-  redwood-app:
-    image: node:20-bookworm-slim
-    container_name: redwood-app
-    working_dir: /app
+  db:
+    image: postgres:latest
+    restart: always
     volumes:
-      - .:/app
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+  
+  api:
+    image: node:14  # or a specific version you prefer
+    restart: always
+    volumes:
+      - ./api:/app/api  # Mount your local api directory
+    working_dir: /app/api
+    command: sh -c "yarn install && yarn rw dev"
+    environment:
+      DATABASE_URL: postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      REDWOOD_ENV: development
+    depends_on:
+      - db
+
+  web:
+    image: node:14  # or a specific version you prefer
+    restart: always
+    volumes:
+      - ./web:/app/web  # Mount your local web directory
+    working_dir: /app/web
+    command: sh -c "yarn install && yarn rw dev"
     ports:
-      - "3000:3000"
       - "8910:8910"
-      - "8911:8911"
-    entrypoint: 
-      - sh
-      - -c
-      - |
-        # Install dependencies
-        apt-get update && apt-get install -y openssl libssl3 ca-certificates yarn &&
+    environment:
+      API_URL: http://api:YOUR_API_PORT  # Insert the correct port if necessary
+    depends_on:
+      - api
 
-        # Initialize Redwood if not already present
-        if [ ! -f /app/redwood.toml ]; then
-          # Create a basic package.json with 'private' set to true
-          echo '{
-            "name": "redwood-app",
-            "version": "1.0.0",
-            "private": true,
-            "scripts": {
-              "dev": "rw dev",
-              "build": "rw build",
-              "start": "rw start",
-              "generate": "rw generate"
-            },
-            "dependencies": {
-              "@redwoodjs/api": "^0.20.0",
-              "@redwoodjs/web": "^0.20.0",
-              "prisma": "^4.10.0"
-            }
-          }' > /app/package.json &&
-          # Use 'yes' to automatically confirm prompts
-          yes | yarn create redwood-app . --force --no-typescript --overwrite;
-        fi
+volumes:
+  db_data:
 
-        # Install dependencies and generate Prisma
-        yarn install --yes &&
-        rm -rf node_modules/.prisma &&
-        npx prisma generate &&
-
-        # Enable Corepack for Yarn 3
-        corepack enable &&
-
-        # Start Redwood development server
-        yarn rw dev
+networks:
+  default:
