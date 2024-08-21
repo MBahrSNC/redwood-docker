@@ -44,5 +44,3 @@ services:
 
 volumes:
   redwood-data:
-      o: bind
-      device: ./api/db
