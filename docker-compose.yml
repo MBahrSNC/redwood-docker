@@ -39,7 +39,7 @@ services:
       else
         if [ ! -f /app/redwood.toml ]; then
           echo '{\"private\": true}' > /app/package.json &&
-          echo 'n\n' | yarn create redwood-app . --force --no-typescript --overwrite --no;
+          echo 'n\n' | yarn create redwood-app . --force --no-typescript --overwrite --no-git --no-install;
         fi &&
         yarn install --yes &&
         rm -rf node_modules/.prisma &&
