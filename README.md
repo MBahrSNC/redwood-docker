@@ -1,8 +1,10 @@
 # redwood-docker
 
 ## Working
-- docker-compose-checkpoint-v1
-- docker-compose.dev
+
+- docker-compose-checkpoint-v1.yml
+- docker-compose.dev.yml
 
 ## Not working
-- docker-compose.prod
+
+- docker-compose.prod.yml
