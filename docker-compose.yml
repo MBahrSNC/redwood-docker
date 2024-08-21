@@ -1,5 +1,4 @@
 version: "3.8"
-
 services:
  redwood-app:
    image: node:20-alpine
@@ -19,15 +18,13 @@ services:
      BROWSER: "none"
      NODE_ENV: ${NODE_ENV:-development} # Default to development if not set
    entrypoint: |
-     sh -c "
+     bash -c "
      apk add --no-cache openssl ca-certificates &&
-     echo 'Y\n' | corepack enable &&
-     yarn add prisma &&
-     npx prisma generate && 
+     corepack enable &&
      if [ \"$NODE_ENV\" = \"production\" ]; then
        yarn install &&
        if [ ! -f /app/api/db/schema.prisma ]; then
-         npx prisma generate --schema=/app/api/db/schema.prisma;
+         echo 'Prisma schema not found. Skipping prisma generate.';
        else
          npx prisma generate --schema=/app/api/db/schema.prisma;
        fi &&
@@ -41,6 +38,5 @@ services:
      fi
      "
    restart: unless-stopped
-
 volumes:
-  redwood-data:
+ redwood-data:
