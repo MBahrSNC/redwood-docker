@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  redwood-app:
+    image: node:20-bookworm-slim
+    container_name: redwood-app
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "8910:8910" # Redwood Web
+      - "8911:8911" # Redwood API
+    environment:
+      BROWSER: "none"
+    entrypoint: |
+      bash -c "
+      apt-get update && apt-get install -y openssl libssl3 ca-certificates &&
+      corepack enable &&
+      if [ ! -f /app/redwood.toml ]; then
+        echo '{\"private\": true}' > /app/package.json &&
+        echo 'n\n' | yarn create redwood-app . --force --no-typescript --overwrite;
+      fi &&
+      yarn install &&
+      rm -rf node_modules/.prisma &&
+      npx prisma generate &&
+      yarn rw dev
+      "
