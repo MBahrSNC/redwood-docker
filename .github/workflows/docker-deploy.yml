@@ -22,7 +22,7 @@ jobs:
     - name: Commit Docker Image
       run: |
         CONTAINER_ID=$(docker ps -aqf "name=redwood-app")
-        docker commit $CONTAINER_ID ghcr.io/${{ github.repository }}/redwood:latest
+        docker commit $CONTAINER_ID ghcr.io/mbahrsnc/redwood-docker/redwood:latest
 
     - name: Log in to GitHub Container Registry
       uses: docker/login-action@v2
