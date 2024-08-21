@@ -9,6 +9,10 @@ git clone https://github.com/MBahrSNC/redwood-docker
 ```
 
 ```shell
+cd redwood-docker
+```
+
+```shell
 docker compose up -d  # development
 ```
 
