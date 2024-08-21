@@ -7,7 +7,7 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-      - redwood-prisma:/app/prisma # Mount the entire prisma directory instead of just the schema.prisma file
+      - redwood-prisma:/app/prisma
     ports:
       - "8910:8910" # Redwood Web
       - "8911:8911" # Redwood API
