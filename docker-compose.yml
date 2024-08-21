@@ -25,7 +25,7 @@ services:
      if [ \"$NODE_ENV\" = \"production\" ]; then
        yarn install &&
        if [ ! -f /app/api/db/schema.prisma ]; then
-         echo 'Prisma schema not found. Skipping prisma generate.';
+         npx prisma generate --schema=/app/api/db/schema.prisma;
        else
          npx prisma generate --schema=/app/api/db/schema.prisma;
        fi &&
