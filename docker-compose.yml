@@ -15,7 +15,6 @@ services:
     entrypoint: |
       bash -c "
       apt-get update && apt-get install -y openssl libssl3 ca-certificates &&
-      corepack disable yarn &&
       if [ ! -f /app/redwood.toml ]; then
         echo '{\"private\": true}' > /app/package.json &&
         echo 'n\n' | yarn create redwood-app . --force --no-typescript --overwrite;
@@ -23,5 +22,6 @@ services:
       yarn install --yes &&
       rm -rf node_modules/.prisma &&
       npx prisma generate &&
+      corepack disable yarn &&
       yarn rw dev
       "
