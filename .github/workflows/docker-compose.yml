@@ -32,9 +32,13 @@ jobs:
     - name: Build Docker Images
       run: docker-compose -f docker-compose.yml build
 
-    - name: Push Docker Images
+    - name: List Docker Images
+      run: docker images
+
+    - name: Tag and Push Docker Images
       run: |
-        docker tag redwood-app ghcr.io/mbahrsnc/redwood-docker/redwood:latest
+        IMAGE_ID=$(docker images -q redwood-app)
+        docker tag $IMAGE_ID ghcr.io/mbahrsnc/redwood-docker/redwood:latest
         docker push ghcr.io/mbahrsnc/redwood-docker/redwood:latest
 
     - name: Deploy with Docker Compose
