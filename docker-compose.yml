@@ -21,14 +21,14 @@ services:
     entrypoint: |
       sh -c "
       apk add --no-cache openssl ca-certificates &&
-      corepack enable &&
-      yarn install &&
       if [ -f /app/api/db/schema.prisma ]; then
-        npx prisma generate --yes --schema=/app/api/db/schema.prisma --force; # Generate Prisma schema
+        npx prisma generate --yes --schema=/app/api/db/schema.prisma; # Generate Prisma schema
       else
         echo 'Prisma schema not found. Please ensure /app/api/db/schema.prisma exists.';
         exit 1;
       fi &&
+      corepack enable &&
+      yarn install &&
       if [ \"$NODE_ENV\" != \"production\" ]; then
         yarn rw dev;
       else
