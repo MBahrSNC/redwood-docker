@@ -1,47 +1,43 @@
-
-version: '3.8'
-
-name: redwood-app
+version: "3.8"
 services:
-  db:
-    image: postgres:latest
-    restart: always
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-  
-  api:
-    image: node:14  # or a specific version you prefer
-    restart: always
-    volumes:
-      - ./api:/app/api  # Mount your local api directory
-    working_dir: /app/api
-    command: sh -c "yarn install && yarn rw dev"
-    environment:
-      DATABASE_URL: postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
-      REDWOOD_ENV: development
-    depends_on:
-      - db
-
-  web:
-    image: node:14  # or a specific version you prefer
-    restart: always
-    volumes:
-      - ./web:/app/web  # Mount your local web directory
-    working_dir: /app/web
-    command: sh -c "yarn install && yarn rw dev"
-    ports:
-      - "8910:8910"
-    environment:
-      API_URL: http://api:YOUR_API_PORT  # Insert the correct port if necessary
-    depends_on:
-      - api
-
+ redwood-app:
+   image: node:20-alpine
+   container_name: redwood-app
+   working_dir: /app
+   volumes:
+     - .:/app
+     - /app/node_modules # Prevents node_modules from being overwritten
+     - ./api/db:/app/api/db # Mount the entire prisma directory
+   ports:
+     - "8910:8910" # Redwood Web
+     - "8911:8911" # Redwood API
+     - "5555:5555" # Prisma Studio
+     - "7910:7910" # Storybook
+     - "4318:4318" # Redwood Studio
+   environment:
+     BROWSER: "none"
+     NODE_ENV: ${NODE_ENV:-development} # Default to development if not set
+   entrypoint: |
+     sh -c "
+     apk add --no-cache openssl ca-certificates &&
+     echo 'yes\n' | corepack enable &&
+     yarn config set --home enableTelemetry 0 &&
+     if [ \"$NODE_ENV\" = \"production\" ]; then
+       yarn install &&
+       if [ ! -f /app/api/db/schema.prisma ]; then
+         echo 'Prisma schema not found. Skipping prisma generate.';
+       else
+         npx prisma generate --schema=/app/api/db/schema.prisma;
+       fi &&
+       yarn rw build &&
+       yarn rw serve;
+     else
+       yarn install &&
+       rm -rf node_modules/.prisma &&
+       npx prisma generate &&
+       yarn rw dev;
+     fi
+     "
+   restart: unless-stopped
 volumes:
-  db_data:
-
-networks:
-  default:
+ redwood-data:
