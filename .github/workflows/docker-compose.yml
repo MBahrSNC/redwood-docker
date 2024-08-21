@@ -32,4 +32,4 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Push Docker Image
-      run: docker push ghcr.io/${{ github.repository }}/redwood:latest
+      run: docker push ghcr.io/mbahrsnc/redwood-docker/redwood:latest
