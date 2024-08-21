@@ -5,11 +5,15 @@ My attempt at dockerizing RedwoodJS
 ## Setup
 
 ```shell
-git clone https://github.com/MBahrSNC/redwood-docker
+mkdir app
 ```
 
 ```shell
-cd redwood-docker
+cd app
+```
+
+```shell
+curl -O https://github.com/MBahrSNC/redwood-docker/blob/main/docker-compose.yml
 ```
 
 ```shell
