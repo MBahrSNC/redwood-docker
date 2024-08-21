@@ -19,7 +19,7 @@ services:
     entrypoint: |
       bash -c "
       apt-get update && apt-get install -y openssl libssl3 ca-certificates &&
-      corepack enable &&
+      echo 'y\n' | corepack enable &&
       if [ \"$NODE_ENV\" = \"production\" ]; then
         yarn install &&
         if [ ! -f /app/prisma/schema.prisma ]; then
