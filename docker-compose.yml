@@ -23,7 +23,9 @@ services:
       apt-get update && apt-get install -y openssl libssl3 ca-certificates yarn &&
       yarn install --yes &&
       corepack enable &&
+      corepack prepare yarn@stable --activate &&
       if [ \"$NODE_ENV\" = \"production\" ]; then
+        yarn config set --home Telemetry 0
         yarn install --yes &&
         if [ ! -f /app/prisma/schema.prisma ]; then
           echo 'Prisma schema not found. Skipping prisma generate.';
