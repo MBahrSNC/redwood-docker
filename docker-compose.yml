@@ -5,7 +5,7 @@ services:
     image: node:20
     working_dir: /app
     volumes:
-      - .:/app
+      - ./app:/app
     environment:
       BROWSER: none
     command: bash -c "yarn create redwood-app . --no-typescript --no-install --overwrite --database sqlite  --no-git && corepack enable && corepack prepare yarn@stable --activate && yarn install && yarn redwood dev"
